@@ -12,9 +12,18 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float turnSpeed = 1.0f;
     
-    private Rigidbody2D _rigidbody;
     private bool _thrusting;
+    
     private float _turnDirection;
+    
+    private Rigidbody2D _rigidbody;
+    
+    public event System.Action OnPlayerDied;
+    
+    public void Die()
+    {
+        OnPlayerDied?.Invoke();
+    }
 
     private void Awake()
     {
@@ -22,6 +31,11 @@ public class Player : MonoBehaviour
     }
 
     private void Update()
+    {
+        HandleInput();
+    }
+    
+    private void HandleInput()
     {
         _thrusting = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow);
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
@@ -59,6 +73,14 @@ public class Player : MonoBehaviour
         Bullet bullet = Instantiate(this.bulletPrefab, this.transform.position, this.transform.rotation);
         bullet.Project(this.transform.up);
     }
+    
+    public void Respawn(Vector3 position)
+    {
+        transform.position = position;
+        _rigidbody.linearVelocity = Vector2.zero;
+        _rigidbody.angularVelocity = 0.0f;
+        gameObject.SetActive(true);
+    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -69,7 +91,7 @@ public class Player : MonoBehaviour
             
             this.gameObject.SetActive(false);
             
-            GameManager.Instance.PlayerDied();
+            Die();
 
         }
     }
