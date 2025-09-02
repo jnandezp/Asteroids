@@ -22,6 +22,9 @@ public class Asteroid : MonoBehaviour
     
     private SpriteRenderer _spriteRenderer;
     private Rigidbody2D _rigidbody;
+    
+    public GameManager gameManager;
+
 
     private void Awake()
     {
@@ -58,7 +61,7 @@ public class Asteroid : MonoBehaviour
 
             }
             
-            FindObjectOfType<GameManager>().AsteroidDestroyed(this);
+            GameManager.Instance.AsteroidDestroyed(this);
 
             Destroy(this.gameObject);
         }

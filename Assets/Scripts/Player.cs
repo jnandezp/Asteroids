@@ -15,8 +15,6 @@ public class Player : MonoBehaviour
     private Rigidbody2D _rigidbody;
     private bool _thrusting;
     private float _turnDirection;
-    
-    
 
     private void Awake()
     {
@@ -71,7 +69,8 @@ public class Player : MonoBehaviour
             
             this.gameObject.SetActive(false);
             
-            FindObjectOfType<GameManager>().PlayerDied();
+            GameManager.Instance.PlayerDied();
+
         }
     }
 
