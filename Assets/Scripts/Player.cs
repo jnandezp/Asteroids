@@ -1,7 +1,8 @@
 using System;
 using UnityEngine;
+// POLYMORPHISM
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IDamageable // INHERITANCE, POLYMORPHISM
 {
     [SerializeField]
     private Bullet bulletPrefab;
@@ -20,9 +21,18 @@ public class Player : MonoBehaviour
     
     public event System.Action OnPlayerDied;
     
-    public void Die()
+    public void Die() // POLYMORPHISM
     {
         OnPlayerDied?.Invoke();
+    }
+
+    // POLYMORPHISM
+    public void TakeDamage(float amount)
+    {
+        _rigidbody.linearVelocity = Vector2.zero;
+        _rigidbody.angularVelocity = 0.0f;
+        this.gameObject.SetActive(false);
+        Die();
     }
 
     private void Awake()
@@ -74,7 +84,8 @@ public class Player : MonoBehaviour
         bullet.Project(this.transform.up);
     }
     
-    public void Respawn(Vector3 position)
+    // ABSTRACTION
+    public void Respawn(Vector3 position) 
     {
         transform.position = position;
         _rigidbody.linearVelocity = Vector2.zero;
@@ -86,13 +97,7 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.tag == "Asteroid")
         {
-            _rigidbody.linearVelocity = Vector3.zero;
-            _rigidbody.angularVelocity = 0.0f;
-            
-            this.gameObject.SetActive(false);
-            
-            Die();
-
+            TakeDamage(1.0f); // POLYMORPHISM
         }
     }
 
