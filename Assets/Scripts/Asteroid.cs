@@ -66,6 +66,13 @@ public class Asteroid : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
+    
+    public int GetPoints()
+    {
+        if (size < 0.75f) return 100;
+        if (size < 1.0f) return 50;
+        return 25;
+    }
 
     private void CreateSplit()
     {
