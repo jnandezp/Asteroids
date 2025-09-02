@@ -15,6 +15,8 @@ public class Player : MonoBehaviour
     private Rigidbody2D _rigidbody;
     private bool _thrusting;
     private float _turnDirection;
+    
+    
 
     private void Awake()
     {
@@ -27,11 +29,9 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
             _turnDirection = 1.0f;
-            Debug.Log("turn direction 1");
         } else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
             _turnDirection = -1.0f;
-            Debug.Log("turn direction -1");
         } else
         {
             _turnDirection = 0.0f;
@@ -61,5 +61,19 @@ public class Player : MonoBehaviour
         Bullet bullet = Instantiate(this.bulletPrefab, this.transform.position, this.transform.rotation);
         bullet.Project(this.transform.up);
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Asteroid")
+        {
+            _rigidbody.linearVelocity = Vector3.zero;
+            _rigidbody.angularVelocity = 0.0f;
+            
+            this.gameObject.SetActive(false);
+            
+            FindObjectOfType<GameManager>().PlayerDied();
+        }
+    }
+
 }
  
