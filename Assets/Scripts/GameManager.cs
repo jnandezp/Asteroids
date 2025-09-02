@@ -11,6 +11,21 @@ public class GameManager : MonoBehaviour
    public float respawnTime = 3.0f;
    
    public int score = 0;
+   
+   public static GameManager Instance; // acceso global
+
+   private void Awake()
+   {
+      if (Instance == null)
+      {
+         Instance = this;
+         DontDestroyOnLoad(gameObject); // opcional, si quieres que persista entre escenas
+      }
+      else
+      {
+         Destroy(gameObject);
+      }
+   }
 
    public void AsteroidDestroyed(Asteroid asteroid)
    {
